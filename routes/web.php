@@ -18,6 +18,3 @@ Route::get('/{any?}', function () {
 })->where('any', '^(?!api\/)[\/\w\.\,-]*');
 
 
-Route::fallback(function () {
-    return view('404');
-});
