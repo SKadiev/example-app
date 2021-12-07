@@ -4,13 +4,18 @@
              Data is loading
         </div>
         <div v-else>
-            <div class="row mb-4">
-                <div class="col">       
-                    <bookable-list-item 
-                        :item-title="bookable.title"
-                        :item-content="bookable.content" 
-                        :price=5>
-                    </bookable-list-item>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                           <h2>{{bookable.title}}</h2>
+                           <hr />
+                           <article>{{bookable.content}}</article>  
+                        </div>
+                    </div>       
+                </div>
+                <div class="col-md-4">
+                    availability & prices
                 </div>
             </div>
         </div>
