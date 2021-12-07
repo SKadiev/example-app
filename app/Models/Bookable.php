@@ -12,4 +12,6 @@ class Bookable extends Model
     protected $filables = [
         'title', 'content'
     ];
+
+    
 }

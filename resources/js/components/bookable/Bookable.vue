@@ -42,7 +42,7 @@ export default {
         this.loading = true;
         const bookableIdentifier = this.getSingleBookableUrl();
         if (bookableIdentifier) {
-            axios.get("/api/bookables/" + bookableIdentifier)
+            axios.get("/api/bookable/" + bookableIdentifier)
                 .then(result => result.data)
                 .then(data => this.bookable = data)
                 .then(() => this.loading = false)
