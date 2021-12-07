@@ -58,7 +58,7 @@ export default {
 
     created() {
         this.loading = true;
-        axios.get('/api/bookable')
+        axios.get('/api/bookables')
             .then(result => result.data)
             .then(data => this.bookables = data)
             .then(() => this.loading = false)
