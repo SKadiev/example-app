@@ -6,7 +6,6 @@ import Index from './index.vue';
 require('./bootstrap');
 
 window.Vue = require('vue').default;
-
 Vue.use(VueRouter);
 
 const app = new Vue({

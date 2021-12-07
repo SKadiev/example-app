@@ -5349,31 +5349,15 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.loading = true;
-    setTimeout(function () {
-      _this.bookables = [{
-        title: "cheap villa",
-        content: "very cheap vila"
-      }, {
-        title: "cheap villa 2",
-        content: "very cheap vila 2"
-      }, {
-        title: "cheap villa 2",
-        content: "very cheap vila 2"
-      }, {
-        title: "cheap villa 2",
-        content: "very cheap vila 2"
-      }, {
-        title: "cheap villa 2",
-        content: "very cheap vila 2"
-      }, {
-        title: "cheap villa 2",
-        content: "very cheap vila 2"
-      }, {
-        title: "cheap villa 2",
-        content: "very cheap vila 2"
-      }];
-      _this.loading = false;
-    }, 1000);
+    axios.get('/api/bookables').then(function (result) {
+      return result.data;
+    }).then(function (data) {
+      return _this.bookables = data;
+    }).then(function () {
+      return _this.loading = false;
+    })["catch"](function (err) {
+      return console.log(err);
+    });
   }
 });
 
@@ -28239,7 +28223,7 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "card" }, [
+  return _c("div", { staticClass: "card w-100" }, [
     _c("div", { staticClass: "card-body" }, [
       _c("h5", { staticClass: "card-title" }, [_vm._v(_vm._s(_vm.itemTitle))]),
       _vm._v(" "),
@@ -28284,7 +28268,10 @@ var render = function () {
                 _vm._l(_vm.bookablesInRow(row), function (bookable, column) {
                   return _c(
                     "div",
-                    { key: "row" + row + column, staticClass: "col" },
+                    {
+                      key: "row" + row + column,
+                      staticClass: "col d-flex align-items-strech",
+                    },
                     [
                       _c("bookable-list-item", {
                         attrs: {
