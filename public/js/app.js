@@ -5287,7 +5287,7 @@ __webpack_require__.r(__webpack_exports__);
 
     if (bookableIdentifier) {
       axios.get("/api/bookables/" + bookableIdentifier).then(function (result) {
-        return result.data;
+        return result.data.data;
       }).then(function (data) {
         return _this.bookable = data;
       }).then(function () {
@@ -5408,7 +5408,7 @@ __webpack_require__.r(__webpack_exports__);
 
     this.loading = true;
     axios.get('/api/bookables').then(function (result) {
-      return result.data;
+      return result.data.data;
     }).then(function (data) {
       return _this.bookables = data;
     }).then(function () {
