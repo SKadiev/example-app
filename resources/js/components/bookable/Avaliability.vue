@@ -11,6 +11,7 @@
                     class="form-control form-control-sm" 
                     placeholder="Start Date"
                     :class="[{'is-invalid' : this.errorFor('from')} ]">
+            <div class="invalid-feedback" v-for="(error, index) in this.errorFor('from')" :key="'from' + index">{{error}}</div>
             </div>
              <div class="form-group col-md-6">
                 <label for="to">To</label>
@@ -21,7 +22,9 @@
                     class="form-control form-control-sm"
                     placeholder="End Date"
                     :class="[{'is-invalid' : this.errorFor('to')} ]">
+            <div class="invalid-feedback" v-for="(error, index) in this.errorFor('to')" :key="'to' + index">{{error}}</div>
             </div>
+
         </div>
         <button
             @click="check"
@@ -93,5 +96,9 @@ export default {
     .is-invalid {
         border-color:#b22222;
         background-image: none;
+    }
+     
+    .invalid-feedback {
+        color:#b22222;
     }
 </style>
