@@ -1,6 +1,10 @@
 <template>
     <div>
-        <h6 class="text-uppercase text-scondary font-weight-bolder">Check Avalibility</h6>
+        <h6 class="text-uppercase text-scondary font-weight-bolder">
+            Check Avalibility
+            <span v-if="noAvailability" class="text-danger">(NOT AVAILABLE)</span>
+            <span v-if="hasAvailability" class="text-success">(AVAILABLE)</span>
+        </h6>
         <div class="form-row row pb-4">
             <div class="form-group col-md-6">
                 <label for="from">From</label>
@@ -82,7 +86,7 @@ export default {
         },
         noAvailability() {
 
-            return 400 === this.status;
+            return 404 === this.status;
         }
     }
 }

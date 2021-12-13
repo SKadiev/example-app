@@ -17,12 +17,11 @@ class BookableAvailabilityController extends Controller
      */
     public function __invoke(Bookable $bookable, BookabableAvaliabilityRequest $request)
     {
-        dd($request->getAcceptableContentTypes());
         $data = $request->validated();
         $data = $request->safe()->only(['from', 'to']);
         extract($data);
 
-        return $bookable->availableFor($to,$from)
+        return $bookable->availableFor($from, $to)
             ? response()->json([]) 
             : response()->json([], 404);
     }
