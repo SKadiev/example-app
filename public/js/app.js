@@ -5260,16 +5260,66 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       to: null,
-      from: '2019-11-08'
+      from: null,
+      loading: false,
+      status: null,
+      errors: null
     };
   },
   methods: {
     check: function check() {
-      alert('Check');
+      var _this = this;
+
+      this.loading = true;
+      this.errors = true;
+      axios.get("/api/bookables/".concat(this.$route.params.id, "/availability?from=").concat(this.from, "&to=").concat(this.to)).then(function (response) {
+        _this.status = response.status;
+      })["catch"](function (error) {
+        if (422 === error.response.status) {
+          _this.errors = error.response.data.errors;
+        }
+
+        _this.status = error.response.status;
+      }).then(function () {
+        return _this.loading = false;
+      });
+    },
+    errorFor: function errorFor(field) {
+      return this.hasErrors && this.errors[field] ? this.errors[field] : null;
+    }
+  },
+  computed: {
+    hasErrors: function hasErrors() {
+      return this.status === 422 && this.errors !== null;
+    },
+    hasAvailability: function hasAvailability() {
+      return 200 === this.status;
+    },
+    noAvailability: function noAvailability() {
+      return 400 === this.status;
     }
   }
 });
@@ -10612,7 +10662,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\nlabel[data-v-1a2de2f2] {\n    font-size: 0.7rem;\n    text-transform: uppercase;\n    color: gray;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\nlabel[data-v-1a2de2f2] {\n    font-size: 0.7rem;\n    text-transform: uppercase;\n    color: gray;\n}\n.is-invalid[data-v-1a2de2f2] {\n    border-color:#b22222;\n    background-image: none;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -28817,6 +28867,7 @@ var render = function () {
             },
           ],
           staticClass: "form-control form-control-sm",
+          class: [{ "is-invalid": this.errorFor("from") }],
           attrs: { type: "text", name: "from", placeholder: "Start Date" },
           domProps: { value: _vm.from },
           on: {
@@ -28843,6 +28894,7 @@ var render = function () {
             },
           ],
           staticClass: "form-control form-control-sm",
+          class: [{ "is-invalid": this.errorFor("to") }],
           attrs: { type: "text", name: "to", placeholder: "End Date" },
           domProps: { value: _vm.to },
           on: {
@@ -28861,7 +28913,7 @@ var render = function () {
       "button",
       {
         staticClass: "btn btn-secondary col-12 pb-4",
-        attrs: { type: "button" },
+        attrs: { disabled: _vm.loading, type: "button" },
         on: {
           click: _vm.check,
           keyup: function ($event) {
@@ -28875,7 +28927,7 @@ var render = function () {
           },
         },
       },
-      [_vm._v("Check")]
+      [_vm._v("\n        Check\n    ")]
     ),
   ])
 }

@@ -4,14 +4,33 @@
         <div class="form-row row pb-4">
             <div class="form-group col-md-6">
                 <label for="from">From</label>
-                <input v-model="from" type="text" name="from" class="form-control form-control-sm" placeholder="Start Date">
+                <input 
+                    v-model="from" 
+                    type="text"
+                    name="from" 
+                    class="form-control form-control-sm" 
+                    placeholder="Start Date"
+                    :class="[{'is-invalid' : this.errorFor('from')} ]">
             </div>
              <div class="form-group col-md-6">
                 <label for="to">To</label>
-                <input v-model="to" type="text" name="to" class="form-control form-control-sm" placeholder="End Date">
+                <input
+                    v-model="to"
+                    type="text"
+                    name="to"
+                    class="form-control form-control-sm"
+                    placeholder="End Date"
+                    :class="[{'is-invalid' : this.errorFor('to')} ]">
             </div>
         </div>
-        <button @click="check" @keyup.enter="check" type="button" class="btn btn-secondary col-12 pb-4">Check</button>
+        <button
+            @click="check"
+            @keyup.enter="check" 
+            :disabled="loading" 
+            type="button" 
+            class="btn btn-secondary col-12 pb-4">
+            Check
+        </button>
     </div>
 </template>
 
@@ -20,13 +39,47 @@ export default {
     data() {
         return {
             to: null,
-            from: '2019-11-08'
+            from: null,
+            loading: false,
+            status: null,
+            errors: null,
         }
     },
 
     methods: {
         check() {
-            alert('Check');
+            this.loading = true;
+            this.errors = true;
+
+            axios.get(`/api/bookables/${this.$route.params.id}/availability?from=${this.from}&to=${this.to}`)
+            .then(response => {
+                this.status = response.status;
+            })
+            .catch(error => {
+                if (422 === error.response.status) {
+                    this.errors = error.response.data.errors
+                }
+                this.status = error.response.status;
+
+            }).then(() => this.loading = false);
+        },
+
+        errorFor(field) {
+            return this.hasErrors && this.errors[field] ? this.errors[field] : null;
+        }
+    },
+    computed: {
+
+        hasErrors() {
+            return this.status === 422 && this.errors !== null;
+        },
+
+        hasAvailability() {
+            return 200 === this.status;
+        },
+        noAvailability() {
+
+            return 400 === this.status;
         }
     }
 }
@@ -36,5 +89,9 @@ export default {
         font-size: 0.7rem;
         text-transform: uppercase;
         color: gray;
+    }
+    .is-invalid {
+        border-color:#b22222;
+        background-image: none;
     }
 </style>
