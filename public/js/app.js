@@ -5629,15 +5629,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     halfStar: function halfStar() {
-      return false;
+      var fraction = Math.round(this.rating - Math.floor(this.rating)) * 100;
+      return fraction > 0 && fraction < 50;
     },
     fullStars: function fullStars() {
-      return 4;
+      return Math.round(this.rating);
     },
     emptyStars: function emptyStars() {
-      return 1;
+      return 5 - Math.ceil(this.rating);
     }
-  }
+  },
+  created: function created() {}
 });
 
 /***/ }),
@@ -50962,6 +50964,9 @@ var render = function () {
       "div",
       { staticClass: "d-flex" },
       [
+        _vm._v(
+          "\n        Actual Rating (" + _vm._s(_vm.rating) + ")\n        "
+        ),
         _vm._l(_vm.fullStars, function (star) {
           return _c("i", { key: "full" + star, staticClass: "fas fa-star" })
         }),
