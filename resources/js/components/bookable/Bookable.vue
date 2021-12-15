@@ -13,10 +13,10 @@
                            <article>{{bookable.content}}</article>  
                         </div>
                     </div>  
-                    <review-list></review-list>     
+                    <review-list :bookable-id="this.$route.params.id"></review-list>     
                 </div>
                 <div class="col-md-4 pb-4">
-                    <avaliability></avaliability>
+                    <avaliability :bookable-id="this.$route.params.id"></avaliability>
                 </div>
             </div>
         </div>
