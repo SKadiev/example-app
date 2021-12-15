@@ -8,7 +8,10 @@
                     <div class="col-md-6">
                         Dzole Dzolevski
                     </div>
-                    <div class="col-md-6 d-flex justify-content-end">{{review.rating}}</div>
+                    <div class="col-md-6 d-flex justify-content-end">
+                        <star-rating :rating="review.rating"></star-rating>
+                    </div>
+                    
 
                     <div class="row">
                         <div class="col-m-12">{{review.createdAt | fromNow}}</div>
