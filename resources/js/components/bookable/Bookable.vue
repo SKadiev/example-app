@@ -12,9 +12,10 @@
                            <hr />
                            <article>{{bookable.content}}</article>  
                         </div>
-                    </div>       
+                    </div>  
+                    <review-list></review-list>     
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 pb-4">
                     <avaliability></avaliability>
                 </div>
             </div>
@@ -24,10 +25,12 @@
 
 <script>
 import Avaliability from './Avaliability.vue';
+import ReviewList from './ReviewList.vue';
 export default {
 
     components: {
-        Avaliability
+        Avaliability,
+        ReviewList
     },
 
     data() {

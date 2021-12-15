@@ -17,7 +17,6 @@ class BookableAvailabilityController extends Controller
      */
     public function __invoke(Bookable $bookable, BookabableAvaliabilityRequest $request)
     {
-        $data = $request->validated();
         $data = $request->safe()->only(['from', 'to']);
         extract($data);
 
