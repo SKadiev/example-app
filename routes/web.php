@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TestQueueEmails;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('sending-queue-emails', [TestQueueEmails::class,'sendTestEmails']);
 
 Route::get('/{any?}', function () {
     return view('welcome');

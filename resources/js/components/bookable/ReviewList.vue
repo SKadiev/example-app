@@ -9,7 +9,7 @@
                         Dzole Dzolevski
                     </div>
                     <div class="col-md-6 d-flex justify-content-end">
-                        <star-rating :rating="review.rating"></star-rating>
+                        <star-rating class="fa-lg" :rating="review.rating"></star-rating>
                     </div>
                     
 
