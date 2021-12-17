@@ -10,6 +10,7 @@
         <div class="form-group">
             <label for="content" class="text-muted">Describe your expirience with</label>
             <textarea
+            v-model="review.content"
             name="content"
             cols="30"
             rows="10"
