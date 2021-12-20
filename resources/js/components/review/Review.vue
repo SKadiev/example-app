@@ -1,12 +1,17 @@
 <template>
     <div class="row">
-        <div :class="[{'col-md-4' : loading || !alreadyReviewed}, {'d-none' : !loading && alreadyReviewed}]">
+        <div class="col-12 row" v-if="error">
+            Uknown error has occured, please try again later
+        </div>
+        <div  class="row" v-else>
+
+        <div :class="[{'col-md-4' : twoColumns}, {'d-none' : oneColumn}]">
             <div class="card">
                 <div class="body">
                     <div v-if="loading">
                         Loading ...
                     </div>
-                    <div v-else>
+                    <div v-if="hasBooking">
                        <p>Stayed at 
                            <router-link :to="{name: 'bookable', params: {id: booking.bookable.bookable_id}}">
                                {{ booking.bookable.title }}
@@ -16,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <div :class="[{'col-md-8' : loading || !alreadyReviewed}, {'col-md-12' : !loading && alreadyReviewed}]">
+        <div :class="[{'col-md-8' :twoColumns}, {'col-md-12' : oneColumn}]">
 
             <div v-if="loading">Loading</div>
             <div v-else>
@@ -46,10 +51,12 @@
                 </div>
             </div>
         </div>
+        </div>
     </div>
 </template>
 
 <script>
+import {is404} from './../shared/components/utils/response';
 export default {
     data() {
         return {
@@ -59,7 +66,8 @@ export default {
             },
             existingReview: null,
             loading: false,
-            booking: null
+            booking: null,
+            error: false
         }
     },
     created() {
@@ -70,17 +78,18 @@ export default {
             }
             ).catch((err) => {
 
-                if (
-                    err.response &&
-                    err.response.status &&
-                    404 === err.response.status
-                 ) {
+                if (is404(err)) {
                     return axios.get(`/api/booking-by-review/${this.$route.params.id}`)
                     .then(result => {
                         this.booking = result.data.data;
+                    }).
+                    catch(err => {
+                        this.error = !is404(err);
                     });
-                }
+                } 
 
+            this.error = true;
+                
             }).then((response) => {
                 this.loading = false;
 
@@ -96,6 +105,13 @@ export default {
         hasBooking() {
                 return this.booking !== null;
         },
+        oneColumn() {
+            return  !this.loading && this.alreadyReviewed;
+        },
+        twoColumns() {
+            return  this.loading && !this.alreadyReviewed;
+
+        }
     }
 }
 </script>
