@@ -5651,7 +5651,8 @@ __webpack_require__.r(__webpack_exports__);
         content: null
       },
       existingReview: null,
-      loading: false
+      loading: false,
+      booking: null
     };
   },
   created: function created() {
@@ -5659,9 +5660,15 @@ __webpack_require__.r(__webpack_exports__);
 
     this.loading = true;
     axios.get("/api/reviews/".concat(this.$route.params.id)).then(function (result) {
-      return _this.existingReview = result.data.data;
-    })["catch"](function (err) {}).then(function () {
-      return _this.loading = false;
+      _this.existingReview = result.data.data;
+    })["catch"](function (err) {
+      if (err.response && err.response.status && 404 === err.response.status) {
+        return axios.get("/api/booking-by-review/".concat(_this.$route.params.id)).then(function (result) {
+          _this.booking = result.data.data;
+        });
+      }
+    }).then(function (response) {
+      _this.loading = false;
     });
   },
   computed: {
