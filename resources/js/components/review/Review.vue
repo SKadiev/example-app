@@ -47,7 +47,7 @@
                         class="form-control"
                         ></textarea>
                     </div>
-                    <button class="btn btn-lg btn-primary w-100 mt-2">Submit</button>
+                    <button :dsabled="loading" @click.prevent="submit" class="btn btn-lg btn-primary w-100 mt-2">Submit</button>
                 </div>
             </div>
         </div>
@@ -61,6 +61,7 @@ export default {
     data() {
         return {
             review: {
+                id : null,
                 rating: 5,
                 content: null
             },
@@ -71,15 +72,16 @@ export default {
         }
     },
     created() {
+        this.review.id = this.$route.params.id;
         this.loading = true;
-        axios.get(`/api/reviews/${this.$route.params.id}`).
+        axios.get(`/api/reviews/${this.review.id}`).
             then((result) => {
                 this.existingReview = result.data.data;
             }
             ).catch((err) => {
 
                 if (is404(err)) {
-                    return axios.get(`/api/booking-by-review/${this.$route.params.id}`)
+                    return axios.get(`/api/booking-by-review/${this.review.id}`)
                     .then(result => {
                         this.booking = result.data.data;
                     }).
@@ -112,6 +114,19 @@ export default {
             return  this.loading && !this.alreadyReviewed;
 
         }
-    }
+    },
+    methods: {
+        submit() {
+            this.loading = true;
+            axios.post('/api/reviews', this.review)
+            .then(response => console.log(response))
+            .catch(err => {
+                this.error = err;
+            })
+            .then(() => {
+                this.loading = false; 
+            })
+        }
+    },
 }
 </script>
