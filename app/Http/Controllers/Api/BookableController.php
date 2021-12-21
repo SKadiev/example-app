@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BookableIndexResource;
-use App\Http\Resources\BookableResource;
 use App\Http\Resources\BookableShowResource;
 use App\Models\Bookable;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class BookableController extends Controller
 {
@@ -19,7 +17,6 @@ class BookableController extends Controller
      */
     public function index()
     {
-        Storage::disk('public')->put('example.txt', 'Contents');
 
         return  BookableIndexResource::collection(Bookable::all());
 

@@ -7,6 +7,7 @@ use App\Http\Requests\ReviewStoreRequest;
 use App\Http\Resources\ReviewResource;
 use App\Models\Booking;
 use App\Models\Review;
+use App\Services\ReviewService;
 
 class ReviewController extends Controller
 {
@@ -15,25 +16,10 @@ class ReviewController extends Controller
         return new ReviewResource(Review::findOrFail($id));
     }
     
-    public function store (ReviewStoreRequest $request) {
+    public function store (ReviewService $reviewService, ReviewStoreRequest $request) {
        
         $data = $request->validated();
-
-        $booking = Booking::findByReviewKey($data['id']);
-
-        if (null === $booking) {
-            return abort(404);
-        }
-
-        $booking->review_key = '';
-        $booking->save();
-
-        $review = Review::make($data);
-
-        $review->booking_id = $booking->id;
-        $review->bookable_id = $booking->bookable_id;
-        $review->save();
-
+        $review = $reviewService->storeReview($data);
         return new ReviewResource($review);
     }
 }

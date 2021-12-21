@@ -5674,6 +5674,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       review: {
+        id: null,
         rating: 5,
         content: null
       },
@@ -5686,12 +5687,13 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
+    this.review.id = this.$route.params.id;
     this.loading = true;
-    axios.get("/api/reviews/".concat(this.$route.params.id)).then(function (result) {
+    axios.get("/api/reviews/".concat(this.review.id)).then(function (result) {
       _this.existingReview = result.data.data;
     })["catch"](function (err) {
       if ((0,_shared_components_utils_response__WEBPACK_IMPORTED_MODULE_0__.is404)(err)) {
-        return axios.get("/api/booking-by-review/".concat(_this.$route.params.id)).then(function (result) {
+        return axios.get("/api/booking-by-review/".concat(_this.review.id)).then(function (result) {
           _this.booking = result.data.data;
         })["catch"](function (err) {
           _this.error = !(0,_shared_components_utils_response__WEBPACK_IMPORTED_MODULE_0__.is404)(err);
@@ -5718,6 +5720,20 @@ __webpack_require__.r(__webpack_exports__);
     },
     twoColumns: function twoColumns() {
       return this.loading && !this.alreadyReviewed;
+    }
+  },
+  methods: {
+    submit: function submit() {
+      var _this2 = this;
+
+      this.loading = true;
+      axios.post('/api/reviews', this.review).then(function (response) {
+        return console.log(response);
+      })["catch"](function (err) {
+        _this2.error = err;
+      }).then(function () {
+        _this2.loading = false;
+      });
     }
   }
 });
@@ -51343,6 +51359,13 @@ var render = function () {
                             "button",
                             {
                               staticClass: "btn btn-lg btn-primary w-100 mt-2",
+                              attrs: { dsabled: _vm.loading },
+                              on: {
+                                click: function ($event) {
+                                  $event.preventDefault()
+                                  return _vm.submit.apply(null, arguments)
+                                },
+                              },
                             },
                             [_vm._v("Submit")]
                           ),
