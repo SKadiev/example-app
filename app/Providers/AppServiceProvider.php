@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\Api\ReviewController;
+use App\Interfaces\Reviewable;
+use App\Reviews\BookingByReviewKey;
 use App\Services\ReviewService;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Schema;
@@ -19,6 +22,16 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ReviewService::class, function($app) {
             return new ReviewService();
         });
+
+     
+        $this->app->when(ReviewController::class)
+        ->needs(Reviewable::class)
+        ->give(function($app) {
+            return new BookingByReviewKey();
+        });
+
+       
+       
     }
 
     /**
@@ -30,6 +43,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         // JsonResource::withoutWrapping();
+       
 
     }
 }

@@ -3,28 +3,35 @@
 namespace App\Services;
 
 use App\Http\Requests\ReviewStoreRequest;
+use App\Interfaces\Reviewable;
 use App\Models\Booking;
 use App\Models\Review;
 
 class ReviewService 
 {
-   public function storeReview($reviewData) {
+   public function storeReviewByReviewId( Reviewable $review, $reviewData) {
 
-        $booking = Booking::findByReviewKey($reviewData['id']);
+        $booking = $review->getBooking($reviewData['id']);
 
         if (null === $booking) {
             return abort(404);
         }
 
-        $booking->review_key = '';
-        $booking->save();
+        return $this->assosiateReviewWithBooking($booking, $reviewData);
+        
+   }
 
-        $review = Review::make($reviewData);
 
-        $review->booking_id = $booking->id;
-        $review->bookable_id = $booking->bookable_id;
-        $review->save();
+   private function assosiateReviewWithBooking($booking, $reviewData) {
+    $booking->review_key = '';
+    $booking->save();
 
-        return $review;
+    $review = Review::make($reviewData);
+
+    $review->booking_id = $booking->id;
+    $review->bookable_id = $booking->bookable_id;
+    $review->save();
+
+    return $review;
    }
 }
